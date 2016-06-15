@@ -1343,7 +1343,7 @@ msgstr "Verhalten der Pausetaste bei Standbild"
 
 #
 msgid "Single step (GOP)"
-msgstr "Einzelschritte (GOP)"
+msgstr "Einzel Schritte (GOP)"
 
 #
 msgid "Behavior of 0 key in PiP-mode"
@@ -12054,7 +12054,7 @@ msgstr "Starten"
 
 #
 msgid "Select a scirpt to run"
-msgstr "Script zum Starten auswählen"
+msgstr "Script zum starten auswählen"
 
 #
 msgid "Scan All"
@@ -13445,8 +13445,8 @@ msgid "Please wait whilst feeds state is checked."
 msgstr "Bitte warten, Feed-Status wird überprüft"
 
 #: Download Netzwerk Dienste
-msgid "Sorry feeds are down for maintenance, please try again later. If this issue persists please check www.opena.tv"
-msgstr "Feeds sind wegen Wartungsarbeiten im Moment nicht verfügbar, bitte versuchen Sie es später. Für weitere Fragen besuchen Sie bitte www.opena.tv"
+msgid "Sorry feeds are down for maintenance, please try again later."
+msgstr "Feeds sind nicht verfügbar wegen Wartungsarbeiten, bitte versuchen Sie es später"
 
 #: Download Netzwerk Dienste
 msgid "Your %s %s is not connected to the internet, please check your network settings and try again."
@@ -14875,10 +14875,6 @@ msgstr ""
 "Bitte installieren Sie ofgwrite nach /usr/bin/ofgwrite.\n"
 "\n"
 "Plugin wird beendet."
-
-# /SoftwareManager/Flash_online.py:624
-msgid "%d of %d kBytes"
-msgstr "%d von %d kBytes"
 
 msgid "Download Failed !!"
 msgstr "Herunterladen gescheitert!!"
@@ -16978,7 +16974,7 @@ msgid "Popup"
 msgstr "Aufblenden"
 
 msgid "Slide from left"
-msgstr "Von links gleiten"
+msgstr "Von links Gleiten"
 
 msgid "Slide right to left"
 msgstr "Von rechts nach links"
@@ -17124,7 +17120,7 @@ msgid ""
 msgstr ""
 "Keine Programmliste geladen !!\n"
 "\n"
-"Bitte erst eine Programmliste installieren"
+"Bitte erst eine Programmliste Installieren"
 
 msgid ""
 "Selected settingslist:\n"
@@ -17139,7 +17135,7 @@ msgstr ""
 "Liste: %s\n"
 "Datum: %s\n"
 "\n"
-"Möchtest du die Programmliste installieren?"
+"Möchtest du die Programmliste Installieren?"
 
 msgid "Server down"
 msgstr "Server ist Offline"
@@ -17219,48 +17215,3 @@ msgid "Step value for fast switching or long press the volume button. Depending 
 msgstr ""
 "Schrittwert für schnelles Schalten oder langes Drücken der Lautstärketaste. Je nach Einstellung (falls größer) und der aktuellen Lautstärke (wenn kleiner) wird der Schritt angepasst.\n"
 "(ab 30 auf 4, ab 18 auf 3, ab 9 auf 2, ab 3 auf 1)"
-
-msgid "This allows you to show drivers modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Treibern im Download"
-
-msgid "This allows you to show extensions modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Extensions im Download"
-
-msgid "This allows you to show systemplugins modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Systemplugins im Download"
-
-msgid "This allows you to show softcams modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Softcams im Download"
-
-msgid "This allows you to show skins modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Skins im Download"
-
-msgid "This allows you to show lcd skins in downloads"
-msgstr "Dies erlaubt dir die Anzeige von LCD Skins im Download"
-
-msgid "This allows you to show picons modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Picons im Download"
-
-msgid "This allows you to show settings modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Settings im Download"
-
-msgid "This allows you to show m2k modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von M2K im Download"
-
-msgid "This allows you to show weblinks modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Weblinks im Download"
-
-msgid "This allows you to show pli modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von PLI Erweiterungen im Download"
-
-msgid "This allows you to show vix modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von VIX Erweiterungen im Download"
-
-msgid "This allows you to show security modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Security Erweiterungen im Download"
-
-msgid "This allows you to show kernel modules in downloads"
-msgstr "Dies erlaubt dir die Anzeige von Kernel Erweiterungen im Download"
-
-msgid "Please enter the your personal feed URL"
-msgstr "Hier kann man den Persönlichen FEED URL Eintragen"

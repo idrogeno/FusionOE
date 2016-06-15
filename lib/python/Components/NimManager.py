@@ -592,29 +592,23 @@ class SecConfigure:
 			tmp.loft = ConfigSubDict()
 			tmp.diction = ConfigSubDict()
 			tmp.product = ConfigSelection(choices = [], default = None)
-			tmp.positions = ConfigSubDict()
-			tmp.positionsoffset = ConfigSubDict()
 
 		if PN not in tmp.product.choices.choices:
 			print "[reconstructUnicableDate] Product %s not in unicable.xml" % PN
 			scrlist = []
-			SatCR = int(PDict.get('scr', {PN:1}).get(PN,1)) - 1
-			vco = int(PDict.get('vco', {PN:0}).get(PN,0).get(str(SatCR),1))
+			SatCR = int(PDict.get('scr', {PN,1}).get(PN,1)) - 1
+			vco = int(PDict.get('vco', {PN,0}).get(PN,0).get(str(SatCR),1))
 
 			positionslist=[1,(9750, 10600, 11700)]	##adenin_todo
 			positions = int(positionslist[0])
+			tmp.positions = ConfigSubDict()
 			tmp.positions[PN] = ConfigSubList()
 			tmp.positions[PN].append(ConfigInteger(default=positions, limits = (positions, positions)))
-
-			positionsoffsetlist=[0,]	##adenin_todo
-			positionsoffset = int(positionsoffsetlist[0])
-			tmp.positionsoffset[PN] = ConfigSubList()
-			tmp.positionsoffset[PN].append(ConfigInteger(default=positionsoffset, limits = (positionsoffset, positionsoffset)))
 
 			tmp.vco[PN] = ConfigSubList()
 
 			for cnt in range(0,SatCR + 1):
-				vcofreq = (cnt == SatCR) and vco or 0		# equivalent to vcofreq = (cnt == SatCR) ? vco : 0
+				vcofreq = (cnt == SatCR) and vco or 0		# equivalent to vcofreq = (cnt == SatCR) ? 1432 : 0
 				if vcofreq == 0 :
 					scrlist.append(("%d" %(cnt+1),"SCR %d " %(cnt+1) +_("not used")))
 				else:
@@ -819,7 +813,7 @@ class NIM(object):
 	friendly_full_description = property(getFriendlyFullDescription)
 	config_mode = property(lambda self: config.Nims[self.slot].configMode.value)
 	config = property(lambda self: config.Nims[self.slot])
-	empty = property(lambda self: self.getType() is None)
+	empty = property(lambda self: self.getType is None)
 
 class NimManager:
 	def getConfiguredSats(self):

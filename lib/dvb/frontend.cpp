@@ -813,12 +813,9 @@ static inline uint32_t fe_udiv(uint32_t a, uint32_t b)
 
 void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &signalqualitydb)
 {
+	int sat_max = 1600; // for stv0288 / bsbe2
 	int ret = 0x12345678;
-	int sat_max = 1600; // we assume a max of 16db here
-	int ter_max = 2900; // we assume a max of 29db here
-	int cab_max = 4200; // we assume a max of 42db here
-	int atsc_max = 4200; // we assume a max of 42db here
-
+	int ter_max = 2900;
 	if (!strcmp(m_description, "AVL2108")) // ET9000
 	{
 		ret = (int)(snr / 40.5);
@@ -1016,26 +1013,17 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 	{
 		ret = (int)((((double(snr) / (65536.0 / 100.0)) * 0.1800) - 1.0000) * 100);
 	}
+	/*
 	else if (strstr(m_description, "GIGA DVB-C/T NIM (SP8221L)")
 		|| strstr(m_description, "GIGA DVB-C/T NIM (SI4765)")
 		|| strstr(m_description, "GIGA DVB-C/T NIM (SI41652)")
 		|| strstr(m_description, "GIGA DVB-C/T2 NIM (SI4768)")
-		)
+		) // Gigablue
 	{
-		int type = -1;
-		oparm.getSystem(type);
-		switch (type)
-		{
-			case feCable:
-				ret = (int)(snr / 15);
-				cab_max = 4200;
-				break;
-			case feTerrestrial:
-				ret = (int)(snr / 75);
-				ter_max = 1700;
-				break;
-		}
+		ret = (int)(snr / 75);
+		ter_max = 1700;
 	}
+	*/
 	else if (!strcmp(m_description, "Genpix"))
 	{
 		ret = (int)((snr << 1) / 5);
@@ -1090,17 +1078,7 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 			default: break;
 		}
 	}
-	else if (strstr(m_description, "Sundtek DVB-T (III)")) // Sundtek MediaTV Digital Home III...dvb-t/t2 mode
-	{
-		ret = (int)(snr / 75);
-		ter_max = 1700;
-	}
-	else if (strstr(m_description, "Sundtek DVB-S/S2 (IV)"))
-	{
-		ret = (int)(snr / 52);
-		sat_max = 1690;
-	}
-	else if(!strcmp(m_description, "TBS-5925") || !strcmp(m_description, "DVBS2BOX"))
+	else if(!strcmp(m_description, "TBS-5925"))
 	{
 		ret = (snr * 2000) / 0xFFFF;
 		sat_max = 2000;
@@ -1120,14 +1098,14 @@ void eDVBFrontend::calculateSignalQuality(int snr, int &signalquality, int &sign
 		case feSatellite:
 			signalquality = (ret >= sat_max ? 65536 : ret * 65536 / sat_max);
 			break;
-		case feCable:
-			signalquality = (ret >= cab_max ? 65536 : ret * 65536 / cab_max);
+		case feCable: // we assume a max of 42db here
+			signalquality = (ret >= 4200 ? 65536 : ret * 65536 / 4200);
 			break;
-		case feTerrestrial:
+		case feTerrestrial: // we assume a max of 29db here
 			signalquality = (ret >= ter_max ? 65536 : ret * 65536 / ter_max);
 			break;
-		case feATSC:
-			signalquality = (ret >= atsc_max ? 65536 : ret * 65536 / atsc_max);
+		case feATSC: // we assume a max of 42db here
+			signalquality = (ret >= 4200 ? 65536 : ret * 65536 / 4200);
 			break;
 		}
 	}
@@ -1193,7 +1171,7 @@ int eDVBFrontend::readFrontendData(int type)
 				}
 #endif
 				// fallback to old DVB API
-				if(!signalquality && !signalqualitydb || strstr(m_description, "Sundtek"))
+				if(!signalquality && !signalqualitydb)
 				{
 					int snr = readFrontendData(iFrontendInformation_ENUMS::snrValue);
 					calculateSignalQuality(snr, signalquality, signalqualitydb);
@@ -2357,7 +2335,6 @@ RESULT eDVBFrontend::prepare_cable(const eDVBFrontendParametersCable &feparm)
 		eWarning("no SEC module active!");
 		return -ENOENT;
 	}
-	m_data[FREQ_OFFSET] = 0;
 	eDebugNoSimulate("frontend %d tuning dvb-c to %d khz, sr %d, fec %d, modulation %d, inversion %d",
 		m_dvbid,
 		feparm.frequency,
@@ -2376,7 +2353,6 @@ RESULT eDVBFrontend::prepare_terrestrial(const eDVBFrontendParametersTerrestrial
 		eWarning("no SEC module active!");
 		return -ENOENT;
 	}
-	m_data[FREQ_OFFSET] = 0;
 	eDebugNoSimulate("frontend %d tuning dvb-t to %d khz, bandwidth %d, modulation %d, inversion %d",
 	m_dvbid,
 	feparm.frequency,
@@ -2402,7 +2378,6 @@ RESULT eDVBFrontend::prepare_atsc(const eDVBFrontendParametersATSC &feparm)
 		eWarning("no SEC module active!");
 		return -ENOENT;
 	}
-	m_data[FREQ_OFFSET] = 0;
 	eDebugNoSimulate("frontend %d tuning atsc to %d khz, modulation %d, inversion %d",
 	m_dvbid,
 	feparm.frequency,

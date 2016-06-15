@@ -262,6 +262,8 @@ class SystemMemoryInfo(Screen):
 		Screen.__init__(self, session)
 		Screen.setTitle(self, _("Memory Information"))
 		self.skinName = ["SystemMemoryInfo", "About"]
+		self["lab1"] = StaticText(_("FusionOE"))
+		self["lab2"] = StaticText(_("Fusion Team"))
 		self["AboutScrollLabel"] = ScrollLabel()
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -428,18 +430,18 @@ class SystemNetworkInfo(Screen):
 						if status[self.iface]["essid"] == "off":
 							essid = _("No Connection")
 						else:
-							essid = str(status[self.iface]["essid"])
+							essid = status[self.iface]["essid"]
 						if status[self.iface]["accesspoint"] == "Not-Associated":
 							accesspoint = _("Not-Associated")
 							essid = _("No Connection")
 						else:
-							accesspoint = str(status[self.iface]["accesspoint"])
+							accesspoint = status[self.iface]["accesspoint"]
 						if self.has_key("BSSID"):
 							self.AboutText += _('Accesspoint:') + '\t' + accesspoint + '\n'
 						if self.has_key("ESSID"):
 							self.AboutText += _('SSID:') + '\t' + essid + '\n'
 
-						quality = str(status[self.iface]["quality"])
+						quality = status[self.iface]["quality"]
 						if self.has_key("quality"):
 							self.AboutText += _('Link Quality:') + '\t' + quality + '\n'
 
@@ -450,7 +452,7 @@ class SystemNetworkInfo(Screen):
 						if self.has_key("bitrate"):
 							self.AboutText += _('Bitrate:') + '\t' + bitrate + '\n'
 
-						signal = str(status[self.iface]["signal"])
+						signal = status[self.iface]["signal"]
 						if self.has_key("signal"):
 							self.AboutText += _('Signal Strength:') + '\t' + signal + '\n'
 

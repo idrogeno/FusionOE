@@ -512,6 +512,8 @@ class DVDPlayer(Screen, InfoBarBase, InfoBarNotifications, InfoBarSeek, InfoBarP
 			self.okButton()
 			print "[DVD] keyOk"
 			self.toggleInfo()
+			if not self.in_menu:
+				self.toggleShow()
 
 	def keyCancel(self):
 		self.askLeavePlayer()
