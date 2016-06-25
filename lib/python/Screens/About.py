@@ -8,7 +8,7 @@ from Components.About import about
 from Components.ScrollLabel import ScrollLabel
 from Components.Console import Console
 from enigma import eTimer, getEnigmaVersionString
-from boxbranding import getBoxType, getMachineBrand, getMachineName, getImageVersion, getImageBuild, getDriverDate
+from boxbranding import getBoxType, getMachineBuild, getMachineBrand, getMachineName, getImageVersion, getImageBuild, getDriverDate
 
 from Components.Pixmap import MultiPixmap
 from Components.Network import iNetwork
@@ -26,8 +26,10 @@ def getAboutText():
 		AboutText += _("Chipset:\t%s") % about.getChipSetString() + "\n"
 
 	cpuMHz = ""
-	if getBoxType() in ('vusolo4k'):
+	if getMachineBuild() in ('vusolo4k', 'hd51'):
 		cpuMHz = "   (1,5 GHz)"
+	elif getMachineBuild() in ('hd52'):
+		cpuMHz = "   (1,7 GHz)"
 	else:
 		if path.exists('/proc/cpuinfo'):
 			f = open('/proc/cpuinfo', 'r')
@@ -79,6 +81,10 @@ def getAboutText():
 		f = open('/proc/stb/fp/temp_sensor', 'r')
 		tempinfo = f.read()
 		f.close()
+	elif path.exists('/proc/stb/sensors/temp/value'):
+		f = open('/proc/stb/sensors/temp/value', 'r')
+		tempinfo = f.read()
+		f.close()
 	if tempinfo and int(tempinfo.replace('\n', '')) > 0:
 		mark = str('\xc2\xb0')
 		AboutText += _("System temperature:\t%s") % tempinfo.replace('\n', '').replace(' ','') + mark + "C\n"
@@ -114,10 +120,10 @@ class About(Screen):
 			})
 
 	def populate(self):
-		self["lab1"] = StaticText(_("Fusion"))
-		self["lab2"] = StaticText(_("Fusion Team"))
+		self["lab1"] = StaticText(_("openATV"))
+		self["lab2"] = StaticText(_("By openATV Image Team"))
 		model = None
-		self["lab3"] = StaticText(_("Support at") + " www.fusion.com")
+		self["lab3"] = StaticText(_("Support at") + " www.opena.tv")
 
 		AboutText = getAboutText()[0]
 
@@ -262,8 +268,6 @@ class SystemMemoryInfo(Screen):
 		Screen.__init__(self, session)
 		Screen.setTitle(self, _("Memory Information"))
 		self.skinName = ["SystemMemoryInfo", "About"]
-		self["lab1"] = StaticText(_("FusionOE"))
-		self["lab2"] = StaticText(_("Fusion Team"))
 		self["AboutScrollLabel"] = ScrollLabel()
 
 		self["actions"] = ActionMap(["SetupActions", "ColorActions"],
@@ -430,18 +434,18 @@ class SystemNetworkInfo(Screen):
 						if status[self.iface]["essid"] == "off":
 							essid = _("No Connection")
 						else:
-							essid = status[self.iface]["essid"]
+							essid = str(status[self.iface]["essid"])
 						if status[self.iface]["accesspoint"] == "Not-Associated":
 							accesspoint = _("Not-Associated")
 							essid = _("No Connection")
 						else:
-							accesspoint = status[self.iface]["accesspoint"]
+							accesspoint = str(status[self.iface]["accesspoint"])
 						if self.has_key("BSSID"):
 							self.AboutText += _('Accesspoint:') + '\t' + accesspoint + '\n'
 						if self.has_key("ESSID"):
 							self.AboutText += _('SSID:') + '\t' + essid + '\n'
 
-						quality = status[self.iface]["quality"]
+						quality = str(status[self.iface]["quality"])
 						if self.has_key("quality"):
 							self.AboutText += _('Link Quality:') + '\t' + quality + '\n'
 
@@ -452,7 +456,7 @@ class SystemNetworkInfo(Screen):
 						if self.has_key("bitrate"):
 							self.AboutText += _('Bitrate:') + '\t' + bitrate + '\n'
 
-						signal = status[self.iface]["signal"]
+						signal = str(status[self.iface]["signal"])
 						if self.has_key("signal"):
 							self.AboutText += _('Signal Strength:') + '\t' + signal + '\n'
 
@@ -530,7 +534,7 @@ class SystemNetworkInfo(Screen):
 class AboutSummary(Screen):
 	def __init__(self, session, parent):
 		Screen.__init__(self, session, parent=parent)
-		self["selected"] = StaticText("FusionOE:" + getImageVersion())
+		self["selected"] = StaticText("openATV:" + getImageVersion())
 
 		AboutText = getAboutText()[1]
 
@@ -582,7 +586,7 @@ class ViewGitLog(Screen):
 		fd = open('/etc/' + self.logtype + '-git.log', 'r')
 		releasenotes = fd.read()
 		fd.close()
-		releasenotes = releasenotes.replace('\nfusion: build', "\n\nfusion: build")
+		releasenotes = releasenotes.replace('\nopenatv: build', "\n\nopenatv: build")
 		self["text"].setText(releasenotes)
 		summarytext = releasenotes
 		try:

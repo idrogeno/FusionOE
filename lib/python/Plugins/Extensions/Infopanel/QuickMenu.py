@@ -125,7 +125,7 @@ class QuickMenu(Screen, ProtectedScreen):
 		Screen.__init__(self, session)
 		if config.ParentalControl.configured.value:
 			ProtectedScreen.__init__(self)
-		Screen.setTitle(self, _("Fusion Menu"))
+		Screen.setTitle(self, _("Quick Launch Menu"))
 		ProtectedScreen.__init__(self)
 
 		self["key_red"] = Label(_("Exit"))
@@ -282,7 +282,6 @@ class QuickMenu(Screen, ProtectedScreen):
 		self.sublist.append(QuickSubMenuEntryComponent("SABnzbd",_("Setup SABnzbd"),_("Setup SABnzbd")))
 		self.sublist.append(QuickSubMenuEntryComponent("uShare",_("Setup uShare"),_("Setup uShare")))
 		self.sublist.append(QuickSubMenuEntryComponent("Telnet",_("Setup Telnet"),_("Setup Telnet")))
-		self.sublist.append(QuickSubMenuEntryComponent("RemoteTuner",_("Setup Remote Tuner Server"),_("Setup Remote Tuner Server")))
 		self["sublist"].l.setList(self.sublist)
 
 ######## Mount Settings Menu ##############################
@@ -447,8 +446,6 @@ class QuickMenu(Screen, ProtectedScreen):
 			self.session.open(NetworkuShare)
 		elif item[0] == _("Telnet"):
 			self.session.open(NetworkTelnet)
-		elif item[0] == _("RemoteTuner"):
-			self.session.open(RemoteTunerServer)
 ######## Select System Setup Menu ##############################
 		elif item[0] == _("Customise"):
 			self.openSetup("usage")
@@ -611,7 +608,7 @@ class QuickMenu(Screen, ProtectedScreen):
 
 		nimList = []
 		for x in nims:
-			if not nimmanager.getNimConfig(x).configMode.value in ("loopthrough", "satposdepends", "nothing"):
+			if not nimmanager.getNimConfig(x).dvbs.configMode.value in ("loopthrough", "satposdepends", "nothing"):
 				nimList.append(x)
 
 		if len(nimList) == 0:

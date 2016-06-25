@@ -26,7 +26,7 @@ int fileExist(const char* filename){
 
 void noRTC()
 {
-	mybox[0] = NULL;
+	mybox[0] = 0;
 	if(fileExist("/proc/stb/info/gbmodel"))
 	{
 		FILE *fb = fopen("/proc/stb/info/gbmodel","r");
@@ -193,6 +193,7 @@ void TDT::start()
 	if ( chan )
 	{
 		eDVBTableSpec spec;
+		memset(&spec, 0, sizeof(spec));
 		spec.pid = TimeAndDateSection::PID;
 		spec.tid = TimeAndDateSection::TID;
 		spec.tid_mask = 0xFC;

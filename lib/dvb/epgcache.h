@@ -29,9 +29,7 @@
 #include <lib/python/python.h>
 
 #define MjdToEpochTime(x) (((x##_hi << 8 | x##_lo)-40587)*86400)
-#define BcdTimeToSeconds(x) ((3600 * ((10*((x##_h & 0xF0)>>4)) + (x##_h & 0xF))) + \
-							(60 * ((10*((x##_m & 0xF0)>>4)) + (x##_m & 0xF))) + \
-							((10*((x##_s & 0xF0)>>4)) + (x##_s & 0xF)))
+#define BcdTimeToSeconds(x) ((3600 * ((10*((x##_h & 0xF0)>>4)) + (x##_h & 0xF))) + (60 * ((10*((x##_m & 0xF0)>>4)) + (x##_m & 0xF))) + ((10*((x##_s & 0xF0)>>4)) + (x##_s & 0xF)))
 
 #ifdef ENABLE_MHW_EPG
 
@@ -256,7 +254,7 @@ class eEPGCache: public eMainloop, private eThread, public Object
 		int nb_equiv;
 		bool log_open ();
 		void log_close();
-		void log_add (char *message, ...);
+		void log_add (const char *message, ...);
 #endif
 		void readData(const uint8_t *data, int source);
 		void startChannel();

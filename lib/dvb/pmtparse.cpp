@@ -24,6 +24,7 @@ void eDVBPMTParser::clearProgramInfo(program &program)
 	program.videoStreams.clear();
 	program.audioStreams.clear();
 	program.subtitleStreams.clear();
+	program.caids.clear();
 	program.pcrPid = -1;
 	program.pmtPid = -1;
 	program.textPid = -1;
@@ -101,6 +102,12 @@ int eDVBPMTParser::getProgramInfo(program &program)
 					if (!isvideo)
 					{
 						video.type = videoStream::vtH265_HEVC;
+						isvideo = 1;
+					}
+				case 0x42: // CAVS
+					if (!isvideo)
+					{
+						video.type = videoStream::vtCAVS;
 						isvideo = 1;
 					}
 				case 0x10: // MPEG 4 Part 2

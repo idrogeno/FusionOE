@@ -4,7 +4,7 @@ from Tools.CList import CList
 from SystemInfo import SystemInfo
 from Components.Console import Console
 from Tools.HardwareInfo import HardwareInfo
-from boxbranding import getBoxType
+from boxbranding import getBoxType, getMachineBuild
 import Task
 
 def readFile(filename):
@@ -12,6 +12,18 @@ def readFile(filename):
 	data = file.read().strip()
 	file.close()
 	return data
+
+def getextdevices(ext):
+	Console().ePopen("blkid -t TYPE=%s -o device >/tmp/ext.tmp"%ext)
+	time.sleep(0.5)
+	with open("/tmp/ext.tmp", 'r') as myfile:
+		extdevices=myfile.read().replace('\n', ',')
+		extdevices=extdevices.rstrip(",")
+		extdevices = [x.strip() for x in extdevices.split(",")]
+	myfile.close()
+	if os.path.exists('/tmp/ext.tmp'):
+		os.remove('/tmp/ext.tmp')
+	return extdevices
 
 def getProcMounts():
 	try:
@@ -495,9 +507,12 @@ class Harddisk:
 		self.timer.callback.append(self.runIdle)
 		self.idle_running = True
 		self.hdd_timer = False
-		configsettings = readFile('/etc/enigma2/settings')
-		if "config.usage.hdd_timer" in configsettings:
-			self.hdd_timer = True
+		try:
+			configsettings = readFile('/etc/enigma2/settings')
+			if "config.usage.hdd_timer" in configsettings:
+				self.hdd_timer = True
+		except:
+			self.hdd_timer = False
 		self.setIdleTime(self.max_idle_time) # kick the idle polling loop
 
 	def runIdle(self):
@@ -730,7 +745,7 @@ class HarddiskManager:
 				dev = int(readFile(devpath + "/dev").split(':')[0])
 			else:
 				dev = None
-			if getBoxType() in ('vusolo4k'):
+			if getMachineBuild() in ('vusolo4k','hd51','hd52'):
 				devlist = [1, 7, 31, 253, 254, 179] # ram, loop, mtdblock, romblock, ramzswap, mmc
 			else:
 				devlist = [1, 7, 31, 253, 254] # ram, loop, mtdblock, romblock, ramzswap
